@@ -1,0 +1,22 @@
+version: '3.7'
+services:
+  redis_server:
+    image: redis:alpine
+    container_name: redis
+    restart: unless-stopped
+    network_mode: bridge
+    expose:
+      - 6379
+
+  node_service:
+    build: ./app
+    container_name: node_service
+    restart: unless-stopped
+    network_mode: bridge
+    volumes:
+      - .:/src
+      - /src/node_modules
+    ports:
+      - 8081:9000
+    links:
+      - redis_server
